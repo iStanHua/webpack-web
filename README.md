@@ -1,0 +1,2 @@
+# webpack-web
+webpack web
