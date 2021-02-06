@@ -1,0 +1,22 @@
+{
+  "short_name": "Web",
+  "name": "Webpack Web",
+  "description": "Webpack Web progressive web application",
+  "display": "standalone",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/img/icons/android-chrome-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/img/icons/android-chrome-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "start_url": "/index.html",
+  "theme_color": "#e4e4e4",
+  "background_color": "#fff"
+}

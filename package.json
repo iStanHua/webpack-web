@@ -1,0 +1,61 @@
+{
+  "name": "webpack-web",
+  "version": "0.0.1",
+  "description": "webpack web",
+  "scripts": {
+    "serve": "webpack serve --hot --inline --open --mode=development",
+    "build": "cross-env NODE_ENV=production webpack --mode=production --config webpack.config.js",
+    "stats": "cross-env NODE_ENV=production webpack --mode=production --profile --json > stats.json",
+    "precommit": "lint-staged",
+    "pretty": "prettier --write 'app/**/*.js'",
+    "deploy": "npm run build && gh-pages -d dist -b gh-pages"
+  },
+  "dependencies": {
+    "axios": "^0.21.1"
+  },
+  "devDependencies": {
+    "gh-pages": "^3.1.0",
+    "cross-env": "^7.0.3",
+    "node-sass": "^5.0.0",
+    "husky": "^4.3.8",
+    "lint-staged": "^10.5.4",
+    "autoprefixer": "^10.2.4",
+    "file-loader": "^6.2.0",
+    "style-loader": "^2.0.0",
+    "css-loader": "^5.0.1",
+    "postcss-loader": "5.0.0",
+    "clean-webpack-plugin": "^3.0.0",
+    "copy-webpack-plugin": "^7.0.0",
+    "mini-css-extract-plugin": "^1.3.5",
+    "sass-loader": "^11.0.0",
+    "sass-resources-loader": "^2.1.1",
+    "extract-text-webpack-plugin": "^3.0.2",
+    "html-webpack-plugin": "^5.0.0",
+    "optimize-css-assets-webpack-plugin": "^5.0.4",
+    "sitemap-webpack-plugin": "^1.0.0",
+    "workbox-webpack-plugin": "^6.1.0",
+    "webpack": "^5.21.1",
+    "webpack-cli": "^4.5.0",
+    "webpack-dev-server": "^3.11.2"
+  },
+  "lint-staged": {
+    "*.{js,css}": [
+      "npm run pretty",
+      "git add"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/iStanHua/webpack-web.git"
+  },
+  "keywords": [
+    "webpack",
+    "web"
+  ],
+  "author": "istanhua",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/iStanHua/webpack-web/issues"
+  },
+  "homepage": "https://github.com/iStanHua/webpack-web#readme"
+}
