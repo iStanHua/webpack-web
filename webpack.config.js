@@ -1,82 +1,21 @@
 const path = require('path')
 const webpack = require('webpack')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
-const CopyWebpackPlugin = require('copy-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
+const CopyWebpackPlugin = require('copy-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
-const SitemapPlugin = require('sitemap-webpack-plugin').default
-const WorkboxPlugin = require('workbox-webpack-plugin')
+const { GenerateSW } = require('workbox-webpack-plugin')
 
 const isProd = process.env.NODE_ENV === 'production'
+const resolve = (dir) => path.resolve(__dirname, dir)
 
 module.exports = {
   entry: './src/app.js',
   output: {
-    filename: '[name].[hash].js',
-    path: path.resolve(__dirname, 'dist')
+    filename: '[name].[hash:8].js',
+    path: resolve('dist'),
+    publicPath: '/'
   },
-  module: {
-    rules: [
-      {
-        // test: /\.scss$/,
-        test: /\.s[ac]ss$/i,
-        use: [
-          isProd ? MiniCssExtractPlugin.loader : 'style-loader',
-          'css-loader',
-          'sass-loader',
-          {
-            loader: 'sass-resources-loader',
-            options: {
-              resources: path.resolve(__dirname, 'src/styles/variables.scss')
-            }
-          }
-        ]
-      },
-      {
-        test: /.*\.(gif|png|jpe?g|svg)$/i,
-        use: ['file-loader']
-      },
-      {
-        test: /\.(woff|woff2|eot|ttf|otf)$/i,
-        type: 'asset/resource',
-      },
-    ]
-  },
-  plugins: [
-    new webpack.ProgressPlugin(),
-    new CleanWebpackPlugin(),
-    new HtmlWebpackPlugin({
-      template: './src/index.html',
-      minify: {
-        collapseWhitespace: true
-      }
-    }),
-    // new ExtractTextPlugin({
-    //   filename: '[name].[contenthash].css',
-    //   allChunks: false
-    // }),
-    new MiniCssExtractPlugin({
-      filename: '[name].css',
-      chunkFilename: '[id].css',
-    }),
-    new CopyWebpackPlugin({
-      patterns: [
-        { from: 'src/assets/img/', to: 'img' },
-        { from: 'src/assets/fonts/', to: 'fonts' },
-        'src/logo.png', 'src/manifest.json'
-      ]
-    }),
-    // // 防止重复
-    // new webpack.optimize.CommonsChunkPlugin({
-    //   name: 'common'
-    // }),
-    // new WorkboxPlugin.GenerateSW({
-    //   clientsClaim: true,
-    //   skipWaiting: true,
-    //   runtimeCaching: [{ urlPattern: new RegExp('/'), handler: 'staleWhileRevalidate' }]
-    // }),
-    // new SitemapPlugin('https://stanyuan.com', ['/'])
-  ],
   optimization: {
     chunkIds: 'named',
     splitChunks: {
@@ -93,9 +32,78 @@ module.exports = {
           name: 'vendor',
           priority: 10,
           enforce: true
+        },
+        styles: {
+          name: 'main',
+          type: 'css/mini-extract',
+          chunks: 'all',
+          enforce: true,
         }
       }
     }
+  },
+  plugins: [
+    new webpack.ProgressPlugin(),
+    new CleanWebpackPlugin(),
+    new HtmlWebpackPlugin({
+      template: './src/index.html',
+      minify: {
+        removeComments: true,
+        collapseWhitespace: true,
+        removeAttributeQuotes: true
+      }
+    }),
+    new CopyWebpackPlugin({
+      patterns: [
+        { from: 'src/assets/img/icons', to: 'img/icons' },
+        // { from: 'src/assets/fonts/*', to: 'fonts/[name].[hash:8].[ext]', toType: 'template' },
+        'src/logo.png', 'src/manifest.json'
+      ],
+      options: {
+        concurrency: 100,
+      },
+    }),
+    new MiniCssExtractPlugin({
+      filename: '[name].[hash:8].css',
+      chunkFilename: '[id].[hash:8].css',
+    }),
+    // new GenerateSW({
+    //   clientsClaim: true,
+    //   skipWaiting: true
+    // })
+  ],
+  module: {
+    rules: [
+      {
+        // test: /\.scss$/,
+        test: /\.s[ac]ss$/i,
+        use: [
+          isProd ? MiniCssExtractPlugin.loader : 'style-loader',
+          'css-loader',
+          'sass-loader',
+          {
+            loader: 'sass-resources-loader',
+            options: {
+              resources: resolve('src/styles/variables.scss')
+            }
+          }
+        ]
+      },
+      {
+        test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
+        type: 'asset/resource',
+        generator: {
+          filename: 'img/[name].[hash:8][ext]',
+        }
+      },
+      {
+        test: /\.(woff2?|eot|ttf|otf)(\?.*)?$/,
+        type: 'asset/resource',
+        generator: {
+          filename: 'fonts/[name].[hash:8][ext]',
+        }
+      },
+    ]
   },
   devServer: {
     open: true,
