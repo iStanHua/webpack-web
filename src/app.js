@@ -1,16 +1,32 @@
+import history from 'history/browser'
+
+import './components/routerLink'
+
+import router from './router'
+
 import './styles/base.scss'
-import LogoPng from './logo.png'
 
 window.addEventListener('DOMContentLoaded', () => {
 
   window.addEventListener('load', () => {
-    const p = document.createElement('p')
-    p.innerText = 'Hello World!'
-    document.body.appendChild(p)
 
-    const img = new Image()
-    img.src = LogoPng
-    document.body.appendChild(img)
+    console.log(router)
+
+    routerResolve()
+
+    history.listen(({ action, location }) => {
+      console.log('listen', action, location)
+      routerResolve()
+    })
+
+    function routerResolve() {
+      router.resolve(location.pathname).then(async content => {
+        if (typeof content === 'string') document.getElementById('app').innerHTML = content
+        else if (typeof content === 'object') document.getElementById('app').innerHTML = await content.default
+      }).catch(err => {
+        console.log(err)
+      })
+    }
   })
 
 })

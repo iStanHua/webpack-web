@@ -100,6 +100,7 @@ input::-webkit-input-speech-button {
 }
 
 input[type="text"] {
+
   &::-ms-clear,
   &::-ms-reveal {
     display: none;
@@ -180,53 +181,6 @@ iframe {
   }
 }
 
-.sidebar-resize {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  right: 0;
-  z-index: 1;
-  width: 6 * $size;
-  cursor: col-resize;
-}
-
-.grid-layout {
-  display: grid;
-  height: 100%;
-  grid-template-areas: "nav content";
-  grid-template-columns: 300 * $size 1fr;
-  grid-template-rows: 1fr;
-
-  .grid-nav {
-    position: relative;
-    grid-area: nav;
-    overflow-x: hidden;
-    overflow-y: auto;
-  }
-
-  .grid-content {
-    grid-area: content;
-    overflow-x: hidden;
-    overflow-y: auto;
-  }
-}
-
-.section {
-  margin-bottom: 20 * $size;
-  background-color: $white-color;
-  box-shadow: 0 1 * $size 3 * $size rgba(50, 50, 93, 0.15), 0 1 * $size 0 rgba($black-color, 0.02);
-
-  .section-title {
-    padding: 20 * $size 20 * $size 0;
-    line-height: 22 * $size;
-    font-size: 22 * $size;
-  }
-
-  .section-content {
-    padding: 20 * $size;
-
-    p {
-      padding-top: 10 * $size;
-    }
-  }
+router-link {
+  cursor: pointer;
 }

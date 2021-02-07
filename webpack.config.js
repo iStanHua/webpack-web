@@ -16,6 +16,12 @@ module.exports = {
     path: resolve('dist'),
     publicPath: '/'
   },
+  resolve: {
+    extensions: ['.js', '.html', '.json'],
+    alias: {
+      '@': resolve('src'),
+    }
+  },
   optimization: {
     chunkIds: 'named',
     splitChunks: {
@@ -75,6 +81,10 @@ module.exports = {
   module: {
     rules: [
       {
+        test: /\.html$/i,
+        loader: 'html-loader',
+      },
+      {
         // test: /\.scss$/,
         test: /\.s[ac]ss$/i,
         use: [
@@ -109,6 +119,7 @@ module.exports = {
     open: true,
     port: 9095,
     hot: true,
+    historyApiFallback: true,
     contentBase: __dirname + '/src'
   }
 }
