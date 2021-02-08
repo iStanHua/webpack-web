@@ -9,8 +9,9 @@ import './styles/base.scss'
 window.addEventListener('DOMContentLoaded', () => {
 
   window.addEventListener('load', () => {
-
     console.log(router)
+
+    const $app = document.getElementById('app')
 
     routerResolve()
 
@@ -20,9 +21,10 @@ window.addEventListener('DOMContentLoaded', () => {
     })
 
     function routerResolve() {
-      router.resolve(location.pathname).then(async content => {
-        if (typeof content === 'string') document.getElementById('app').innerHTML = content
-        else if (typeof content === 'object') document.getElementById('app').innerHTML = await content.default
+      router.resolve(location.pathname).then(async DOM => {
+        if (typeof DOM === 'string') $app.innerHTML = DOM
+        else if (typeof DOM === 'object') $app.innerHTML = new DOM.default().render()
+        else if (typeof DOM === 'function') $app.innerHTML = new DOM().render()
       }).catch(err => {
         console.log(err)
       })
